@@ -1,6 +1,8 @@
 # RusPiRo bare metal system development kit crate
 
-
+This is the packaged crate combining different RusPiRo crates into one library. The library can be configured with feature gates
+and allowes a more convinient usage pattern for the dependencies in your ``Cargo.toml`` file. See the details and usage patterns
+below...
 
 [![Travis-CI Status](https://api.travis-ci.org/RusPiRo/ruspiro-sdk.svg?branch=master)](https://travis-ci.org/RusPiRo/ruspiro-sdk)
 [![Latest Version](https://img.shields.io/crates/v/ruspiro-sdk.svg)](https://crates.io/crates/ruspiro-sdk)
@@ -15,116 +17,55 @@ To use the crate just add the following dependency to your ``Cargo.toml`` file. 
 ruspiro-sdk = { version = "0.1.0", features = ["ruspiro_pi3"]
 ```
 
-Additional features are:
+The always usable crates are:
+
+- [``ruspiro-register``](https://crates.io/crates/ruspiro-register)
+- [``ruspiro-gpio``](https://crates.io/crates/ruspiro-gpio)
+- [``ruspiro-mailbox``](https://crates.io/crates/ruspiro-mailbox)
+- [``ruspiro-timer``](https://crates.io/crates/ruspiro-timer)
+- [``ruspiro-interrupt``](https://crates.io/crates/ruspiro-interrupt)
+
+Additional features/crates are:
 
 | Feature            | Default | Description |
 |--------------------|---------|-------------|
-| ``with_boot``      | yes     | Bundle the ``ruspiro-boot`` crate into the sdk package providing Raspberry Pi boot code.|
-| ``with_allocator`` | yes     | Bundle the ``ruspiro-allocator`` crate into the sdk package|
-| ``with_console``   | no      | Bundle the ``ruspiro-console`` crate into the sdk package. This requires an allocator to be present. |
-| ``with_uart``      | no      | Bundle the ``ruspiro-uart`` crate into the sdk package. This will always bundle ``ruspiro-console`` and does also require an allocator to be present.|
-| ``with_i2c``       | no      | Bundle the ``ruspiro-i2c`` crate into the sdk package. This requires an allocator to be present. |
+| ``with_boot``      | yes     | Bundle the [``ruspiro-boot``](https://crates.io/crates/ruspiro-boot) crate into the sdk package providing Raspberry Pi boot code.|
+| ``with_allocator`` | yes     | Bundle the [``ruspiro-allocator``](https://crates.io/crates/ruspiro-allocator) crate into the sdk package|
+| ``with_console``   | no      | Bundle the [``ruspiro-console``](https://crates.io/crates/ruspiro-console) crate into the sdk package. This requires an allocator to be present. |
+| ``with_uart``      | no      | Bundle the [``ruspiro-uart``](https://crates.io/crates/ruspiro-uart) crate into the sdk package. This will always bundle ``ruspiro-console`` and does also require an allocator to be present.|
+| ``with_i2c``       | no      | Bundle the [``ruspiro-i2c``](https://crates.io/crates/ruspiro-i2c) crate into the sdk package. This requires an allocator to be present. |
 
 
 ## Usage Scenarios
 
-The following sections give some guidance how the ``ruspiro-sdk`` might be utilized.
+The following sections give some guidance how the ``ruspiro-sdk`` might be utilized. Each scenario provides an example
+that could be found in the sub-folders mentioned in the respective chapter. Those examples should build just fine and could
+be used as starting point for your own projects.
 
 ### Scenario 1: Minimal with built-in boot
-This scenario is the proposed entry point in using the RusPiRo SDK the first time. In this scenario the ``ruspiro-sdk`` comes with a set of default features, ready to be used.
+This scenario is the proposed entry point in using the RusPiRo SDK the first time. In this scenario the ``ruspiro-sdk``
+will be used with the set of default features only.
 Find the whole crate structure here: [Scenario-1](scenario-1)
-
-**Cargo.toml**
-```
-[package]
-name = "rpi3-kernel"
-version = "0.0.1"
-edition = "2018"
-
-[[bin]]
-name = "kernel7"
-path = "src/kernel.rs"
-
-[dependencies]
-ruspiro-sdk = { version = "0.1.0", features = ["ruspiro_pi3"] }
-```
-
-**src/kernel.rs**
-```
-#![no_std]
-#![no_main]
-
-use ruspiro_sdk::*;
-
-come_alive_with!(alive);
-run_with!(think);
-
-fn alive(core: u32) {
-    if core == 0 {
-        GPIO.take_for(|gpio| {
-            gpio.get_pin(17).unwrap().to_output().high();
-        });
-    }
-}
-
-fn think(_core: u32) -> ! {
-
-    loop { };
-}
-```
 
 ### Scenario 1: **Advanced!** Minimal without built-in boot
 
-This advanced scenario 0 is intended for those who either already have their own boot assembly or do want to write their own one.
-So the source code provided assumes the boot assembly to kick-off the Raspberry Pi is provided be the implementer in the file ``src/asm/boot.s``.
-**Cargo.toml**
-```
-[package]
-name = "rpi3-kernel"
-edition = "2018"
-
-[[bin]]
-name = "kernel7"
-path = "src/kernel.rs"
-
-[dependencies]
-ruspiro-sdk = { version = "0.1.0", default-features = false, features = ["ruspiro_pi3"] }
-```
-
-**src/kernel.rs**
-```
-#![no_std]
-#![no_main]
-#![feature(global_asm)]
-
-// make use of the ruspiro-sdk functions
-use ruspiro_sdk::*;
-
-// include the assembly file. Based on the assembly used this might not properly compile here. In this case the assembly should be pre-build using a build script.
-// as this is even more advanced this is not demonstrated here. Check out the [Rust documentation](https://doc.rust-lang.org/cargo/reference/build-scripts.html) for details.
-global_asm!(include_str!("./asm/boot.s"));
-
-// we assume that the implementer of the boot assembly is calling a function as the entry point of the Rust environment. This is assumed to be ``__rust_entry__`` and is intended to never return.
-
-#[no_mangle]
-fn __rust_entry__() -> ! {
+This advanced scenario is intended for those who either already have their own boot assembly or do want to write their own one.
+Additionally some other core requirements to successfully build a binary when not using the ``ruspiro-boot`` need to be fulfilled:
+1. provide a panic handler and a eh_personality function.
+2. provide unwind stubs:
+    - __aeabi_unwind_cpp_pr0
+    - __aeabi_unwind_cpp_pr1
+    - _Unwind_Resume
+3. when using the ``ruspiro-allocator`` in this scenario the linker need to provide the two symbols:
+    - ``__heap_start``
+    - ``__heap_end``
     
-    // we are in Rust and can use the sdk features like the GPIO's
-    GPIO.take_for(|gpio| {
-        // set GPIO Pin as output and high to lit a connected LED
-        gpio.get_pin(17).unwrap().to_output().high();
-    });
-
-    loop { }; // halt here to never return from this function
-} 
-```
-
-#### HINT:
-If you tend to go for this scenario and you would like to use further features like shown in the scenarios below (e.g. ``ruspiro-console``) that do use the custom allocator you have to ensure that the linker script provides the following symbols:
-``__heap_start`` and ``__heap_end`` indicating the physical memory address space of the heap.
+    indicating the physical memory address space of the heap.
 
 ### Scenario 2: Using Uart/Console with built-in boot
-
+This might be the most typical scenario to start with as it provides the functions to successfully initialize the Uart
+to be used as console output channel which makes "debugging" on the real hardware a bit easier.
+Find the whole crate structure here: [Scenario-2](scenario-2)
 
 
 ## License

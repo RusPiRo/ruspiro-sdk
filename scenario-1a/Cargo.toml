@@ -1,0 +1,13 @@
+[package]
+name = "rpi-kernel"
+version = "0.0.1"
+edition = "2018"
+
+[[bin]]
+name ="kernel7"
+path = "src/kernel.rs"
+
+[dependencies.ruspiro-sdk]
+path = "../../ruspiro-sdk"
+default-features = false
+features = ["ruspiro_pi3"]

@@ -9,6 +9,10 @@
 
 //! # Scenarion 2 - use Uart/Console with built-in boot
 //! 
+//! When the one-time initialization is called due to coming alive we retrieve the current core clock rate via a mailbox
+//! call and use this to initialize the Uart0 to be used as the console output channel. If everything went fine the
+//! LED connected to GPIO pin 17 will be lit and one core after the other will write to the console that he has started
+//! thinking.
 
 use ruspiro_sdk::*;
 
@@ -38,7 +42,8 @@ fn alive(core: u32) {
     }
 }
 
-fn think(_core: u32) -> ! {
+fn think(core: u32) -> ! {
+    println!("core {} started thinking...", core);
 
     loop { };
 }

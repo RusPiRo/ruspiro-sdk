@@ -7,6 +7,7 @@ branches:
 language: rust
 
 rust:
+# build nightly only for the time beeing
   - nightly
 
 env:
