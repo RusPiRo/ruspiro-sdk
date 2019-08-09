@@ -6,6 +6,9 @@ branches:
 
 language: rust
 
+rust:
+  - nightly
+
 env:
 # each line hear should trigger a different build, using all folders where we
 # would like to build in in an env variable
@@ -15,9 +18,6 @@ env:
 
 matrix:
   fast_finish: true
-
-  include:
-    - rust: nightly
 
 script: cd $BUILD_DIR && ./travis-build.sh
 
