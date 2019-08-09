@@ -30,3 +30,5 @@ install:
   - rustup target add armv7-unknown-linux-gnueabihf
   - rustup component add rust-src
   - sudo chmod ugo+x ./travis-build.sh
+  - sudo chmod ugo+x ./scenario-1/travis-build.sh
+  - sudo chmod ugo+x ./scenario-2/travis-build.sh
