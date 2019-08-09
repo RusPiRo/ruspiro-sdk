@@ -29,10 +29,10 @@ ruspiro-interrupt = "0.1.0"
 ruspiro-allocator = { version = "0.1.1", optional = true }
 ruspiro-console = { version = "0.1.1", optional = true}
 ruspiro-uart = { version = "0.1.0", optional = true }
-ruspiro-i2c = { path = "../ruspiro-i2c", optional = true }
+ruspiro-i2c = { version = "0.1.0", optional = true }
 
 [features]
-default = ["with_allocator", "with_console", "with_uart"]
+default = ["with_boot", "with_allocator"]
 ruspiro_pi3 = [
     "ruspiro-mailbox/ruspiro_pi3",
     "ruspiro-timer/ruspiro_pi3",
@@ -41,6 +41,6 @@ ruspiro_pi3 = [
 ]
 with_boot = ["ruspiro-boot"]
 with_allocator = ["ruspiro-allocator"]
-with_console = ["ruspiro-console", "ruspiro-console/with_allocator"]
+with_console = ["ruspiro-console"]
 with_uart = ["ruspiro-uart", "with_console"]
 with_i2c = ["ruspiro-i2c"]

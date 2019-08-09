@@ -21,9 +21,11 @@ pub use ruspiro_gpio::GPIO;
 pub use ruspiro_mailbox::{MAILBOX, ArmClockId};
 pub use ruspiro_timer as timer;
 
+/*
 #[macro_use]
 extern crate ruspiro_interrupt;
 pub use ruspiro_interrupt::*;
+*/
 
 #[cfg(feature = "with_boot")]
 #[macro_use]

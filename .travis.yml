@@ -6,13 +6,20 @@ branches:
 
 language: rust
 
+env:
+# each line hear should trigger a different build, using all folders where we
+# would like to build in in an env variable
+  - BUILD_DIR=./
+  - BUILD_DIR=./scenario-1
+  - BUILD_DIR=./scenario-2
+
 matrix:
   fast_finish: true
 
   include:
     - rust: nightly
 
-script: ./travis-build.sh
+script: cd $BUILD_DIR && ./travis-build.sh
 
 install:
 # install cross compiler toolchain
