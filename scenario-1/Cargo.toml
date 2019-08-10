@@ -11,6 +11,3 @@ path = "src/kernel.rs"
 ruspiro-sdk = { path = "../../ruspiro-sdk", features = [
         "ruspiro_pi3"
     ] }
-
-[patch.crates-io]
-ruspiro-interrupt = { path = "../../ruspiro-interrupt" }
