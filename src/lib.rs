@@ -56,6 +56,7 @@ pub use ruspiro_boot::{come_alive_with, run_with};
 extern crate ruspiro_allocator;
 
 #[cfg(any(feature = "with_console", feature = "with_uart"))]
+#[allow(unused_imports)]
 #[macro_use]
 extern crate ruspiro_console;
 #[cfg(any(feature = "with_console", feature = "with_uart"))]

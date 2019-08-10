@@ -6,8 +6,11 @@
  **********************************************************************************************************************/
 #![no_std]
 #![no_main]
-
+#![feature(lang_items)]
 //! # Scenarion 1 - minimal with built-in boot
+//! 
+//! When the one-time initialization is called due to coming alive we lit the LED connected to GPIO pin 17 to let the
+//! world know that we are alive :)
 //! 
 
 use ruspiro_sdk::*;
@@ -18,7 +21,8 @@ run_with!(think);
 fn alive(core: u32) {
     if core == 0 {
         GPIO.take_for(|gpio| {
-            gpio.get_pin(17).unwrap().to_output().high();
+            gpio.get_pin(17).unwrap()
+                .to_output().high();
         });
     }
 }

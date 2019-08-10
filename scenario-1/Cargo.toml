@@ -8,4 +8,9 @@ name ="kernel7"
 path = "src/kernel.rs"
 
 [dependencies]
-ruspiro-sdk = { path = "../../ruspiro-sdk", features = ["ruspiro_pi3"] }
+ruspiro-sdk = { path = "../../ruspiro-sdk", features = [
+        "ruspiro_pi3"
+    ] }
+
+[patch.crates-io]
+ruspiro-interrupt = { path = "../../ruspiro-interrupt" }
