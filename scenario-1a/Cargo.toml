@@ -8,6 +8,7 @@ name ="kernel7"
 path = "src/kernel.rs"
 
 [dependencies.ruspiro-sdk]
-path = "../../ruspiro-sdk"
+path = "../."
+version = "0.2"
 default-features = false
 features = ["ruspiro_pi3"]

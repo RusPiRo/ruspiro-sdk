@@ -4,7 +4,7 @@
  * Author: André Borrmann 
  * License: Apache License 2.0
  **********************************************************************************************************************/
-#![doc(html_root_url = "https://docs.rs/ruspiro-sdk/0.1.0")]
+#![doc(html_root_url = "https://docs.rs/ruspiro-sdk/0.2.0")]
 #![no_std]
 
 //! # RusPiRo System development kit library
@@ -14,10 +14,13 @@
 //! 
 //! The always usable crates are:
 //! - [``ruspiro-register``](https://crates.io/crates/ruspiro-register)
+//! - [``ruspiro-lock``](https://crates.io/crates/ruspiro-lock)
+//! - [``ruspiro-singleton``](https:://create.io/crates/ruspiro-singleton)
 //! - [``ruspiro-gpio``](https://crates.io/crates/ruspiro-gpio)
 //! - [``ruspiro-mailbox``](https://crates.io/crates/ruspiro-mailbox)
 //! - [``ruspiro-timer``](https://crates.io/crates/ruspiro-timer)
 //! - [``ruspiro-interrupt``](https://crates.io/crates/ruspiro-interrupt)
+//! - [``ruspiro-cache``](https://crates.io/crates/ruspiro-cache)
 //! 
 //! Additional features/crates are:
 //! 
@@ -38,11 +41,16 @@ pub use ruspiro_register::{define_register, define_registers, RegisterField, Reg
 pub use ruspiro_gpio::GPIO;
 pub use ruspiro_mailbox::{MAILBOX, ArmClockId};
 pub use ruspiro_timer as timer;
+pub use ruspiro_singleton::Singleton;
+pub use ruspiro_lock as lock;
 
 #[allow(unused_imports)]
 #[macro_use]
-extern crate ruspiro_interrupt;
+pub extern crate ruspiro_interrupt;
 pub use ruspiro_interrupt::*;
+
+#[allow(unused_imports)]
+pub use ruspiro_cache as cache;
 
 #[cfg(feature = "with_boot")]
 #[allow(unused_imports)]
@@ -63,7 +71,7 @@ extern crate ruspiro_console;
 pub use ruspiro_console::{CONSOLE, print, println, info, warn, error};
 
 #[cfg(feature = "with_uart")]
-pub use ruspiro_uart::Uart0;
+pub use ruspiro_uart as uart;//{Uart0, Uart1};
 
 #[cfg(feature = "with_i2c")]
 pub use ruspiro_i2c::{I2C, I2cDevice};

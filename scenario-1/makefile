@@ -24,7 +24,7 @@ export RUSTFLAGS = -C linker=arm-eabi-gcc.exe -C target-cpu=cortex-a53 -C target
 # build the current crate
 all:  
 # cross compile the crate
-	cargo xbuild --target $(TARGET) --release
+	cargo xbuild --bins --target $(TARGET) --release
 
 clean:
 	cargo clean

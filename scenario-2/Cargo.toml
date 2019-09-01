@@ -3,12 +3,16 @@ name = "rpi-kernel"
 version = "0.0.1"
 edition = "2018"
 
+[workspace]
+
 [[bin]]
 name ="kernel7"
 path = "src/kernel.rs"
 
-[dependencies]
-ruspiro-sdk = { path = "../../ruspiro-sdk", features = [
-        "ruspiro_pi3",
-        "with_uart"
-    ] }
+[dependencies.ruspiro-sdk]
+path = "../."
+version = "0.2"
+features = [
+    "ruspiro_pi3",
+    "with_uart"
+]
