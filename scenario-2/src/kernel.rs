@@ -10,7 +10,7 @@
 //! # Scenarion 2 - use Uart/Console with built-in boot
 //! 
 //! When the one-time initialization is called due to coming alive we retrieve the current core clock rate via a mailbox
-//! call and use this to initialize the Uart0 to be used as the console output channel. If everything went fine the
+//! call and use this to initialize the Uart1 (minUart) to be used as the console output channel. If everything went fine the
 //! LED connected to GPIO pin 17 will be lit and one core after the other will write to the console that he has started
 //! thinking.
 
@@ -25,7 +25,7 @@ fn alive(core: u32) {
         MAILBOX.take_for(|mb| mb.get_clockrate(ArmClockId::Core))
             .and_then(|core_rate| {
                 // using this to initialize the UART
-                let mut uart = Uart0::new();
+                let mut uart = uart::Uart1::new();
                 uart.initialize(core_rate, 115_200).map(|_| uart)
             }).and_then(|uart| {
                 // set the uart as current console output channel

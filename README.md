@@ -11,28 +11,32 @@ below...
 
 
 ## Usage
-To use the crate just add the following dependency to your ``Cargo.toml`` file. The components of the sdk crate could be configured using feature gates. The most important one is to set the ``ruspiro_pi3`` feature to enable compiling the peripheral address space and Raspberry Pi 3 specific components successfully.
+To use the crate just add the following dependency to your ``Cargo.toml`` file. The components of the system development kit could be configured using feature gates. The available features are listed in the table below.
 ```
 [dependencies]
-ruspiro-sdk = { version = "0.1.0", features = ["ruspiro_pi3"]
+ruspiro-sdk = "0.2"
 ```
 
 The always usable crates are:
 
 - [``ruspiro-register``](https://crates.io/crates/ruspiro-register)
+- [``ruspiro-lock``](https://crates.io/crates/ruspiro-lock)
+- [``ruspiro-singleton``](https://crates.io/crates/ruspiro-singleton)
 - [``ruspiro-gpio``](https://crates.io/crates/ruspiro-gpio)
 - [``ruspiro-mailbox``](https://crates.io/crates/ruspiro-mailbox)
 - [``ruspiro-timer``](https://crates.io/crates/ruspiro-timer)
+- [``ruspiro-cache``](https://crates.io/crates/ruspiro-cache)
 - [``ruspiro-interrupt``](https://crates.io/crates/ruspiro-interrupt)
 
-Additional features/crates are:
+### Features:
 
 | Feature            | Default | Description |
 |--------------------|---------|-------------|
+| ``ruspiro_pi3``    | yes     | Forwarded to the dependend crates to enable Raspberry Pi3 specific compilation, e.g. provide the proper base address for MMIO register.|
 | ``with_boot``      | yes     | Bundle the [``ruspiro-boot``](https://crates.io/crates/ruspiro-boot) crate into the sdk package providing Raspberry Pi boot code.|
 | ``with_allocator`` | yes     | Bundle the [``ruspiro-allocator``](https://crates.io/crates/ruspiro-allocator) crate into the sdk package|
 | ``with_console``   | no      | Bundle the [``ruspiro-console``](https://crates.io/crates/ruspiro-console) crate into the sdk package. This requires an allocator to be present. |
-| ``with_uart``      | no      | Bundle the [``ruspiro-uart``](https://crates.io/crates/ruspiro-uart) crate into the sdk package. This will always bundle ``ruspiro-console`` and does also require an allocator to be present.|
+| ``with_uart``      | no      | Bundle the [``ruspiro-uart``](https://crates.io/crates/ruspiro-uart) crate into the sdk package. This will always bundle ``ruspiro-console`` and does also require an allocator to be present. So either provide your own or activate the ``with_alocator`` feature as well. |
 | ``with_i2c``       | no      | Bundle the [``ruspiro-i2c``](https://crates.io/crates/ruspiro-i2c) crate into the sdk package. This requires an allocator to be present. |
 
 

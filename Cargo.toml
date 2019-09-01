@@ -1,11 +1,13 @@
 [package]
 name = "ruspiro-sdk"
 authors = ["André Borrmann <pspwizard@gmx.de>"]
-version = "0.1.0" # remember to update html_root_url
-description = "Combine the RusPiRo crates into a SDK library for convinient usage, providing feature gates for the individual parts."
+version = "0.2.0" # remember to update html_root_url
+description = """
+Combine the RusPiRo crates into a SDK library for convinient usage, providing feature gates for the individual parts.
+"""
 license = "Apache-2.0"
-repository = "https://github.com/RusPiRo/ruspiro-sdk/tree/v0.1.0"
-documentation = "https://docs.rs/ruspiro-sdk/0.1.0"
+repository = "https://github.com/RusPiRo/ruspiro-sdk"
+documentation = "https://docs.rs/ruspiro-sdk/0.2.0"
 readme = "README.md"
 keywords = ["RusPiRo", "baremetal", "raspberrypi", "sdk"]
 categories = ["no-std", "embedded"]
@@ -13,30 +15,37 @@ edition = "2018"
 
 [badges]
 travis-ci = { repository = "RusPiRo/ruspiro-sdk", branch = "master" }
-is-it-maintained-issue-resolution = { repository = "RusPiRo/ruspiro-sdk" }
-is-it-maintained-open-issues = { repository = "RusPiRo/ruspiro-sdk" }
 maintenance = { status = "actively-developed" }
 
 [lib]
 
 [dependencies]
-ruspiro-boot = { version = "0.1.0", features = ["with_panic", "with_exception"], optional = true }
-ruspiro-register = "0.1.1"
-ruspiro-gpio = "0.1.0"
-ruspiro-mailbox = "0.1.0"
-ruspiro-timer = "0.1.0"
-ruspiro-interrupt = "0.1.0"
-ruspiro-allocator = { version = "0.1.1", optional = true }
-ruspiro-console = { version = "0.1.1", optional = true}
-ruspiro-uart = { version = "0.1.0", optional = true }
-ruspiro-i2c = { version = "0.1.0", optional = true }
+ruspiro-boot = { version = "0.2", features = ["with_panic", "with_exception"], optional = true }
+ruspiro-lock = "0.2"
+ruspiro-singleton = "0.2"
+ruspiro-register = "0.1"
+ruspiro-gpio = "0.2"
+ruspiro-mailbox = "0.2"
+ruspiro-timer = "0.1"
+ruspiro-cache = "0.1"
+ruspiro-interrupt = "0.2"
+ruspiro-allocator = { version = "0.2", optional = true }
+ruspiro-console = { version = "0.2", optional = true}
+ruspiro-uart = { version = "0.2", optional = true }
+ruspiro-i2c = { version = "0.2", optional = true }
 
 [features]
-default = ["with_boot", "with_allocator"]
+default = ["ruspiro_pi3", "with_boot", "with_allocator", "with_uart"]
 ruspiro_pi3 = [
+    "ruspiro-boot/ruspiro_pi3",
     "ruspiro-mailbox/ruspiro_pi3",
     "ruspiro-timer/ruspiro_pi3",
     "ruspiro-interrupt/ruspiro_pi3",
+    "ruspiro-uart/ruspiro_pi3",
+    "ruspiro-cache/ruspiro_pi3",
+    "ruspiro-gpio/ruspiro_pi3",
+    "ruspiro-i2c/ruspiro_pi3",
+    "ruspiro-lock/ruspiro_pi3",
     "ruspiro-uart/ruspiro_pi3"
 ]
 with_boot = ["ruspiro-boot"]
@@ -44,3 +53,11 @@ with_allocator = ["ruspiro-allocator"]
 with_console = ["ruspiro-console"]
 with_uart = ["ruspiro-uart", "with_console"]
 with_i2c = ["ruspiro-i2c"]
+
+[package.metadata.docs.rs]
+all-features = true
+default-target = "armv7-unknown-linux-gnueabihf"
+rustc-args = [
+    "-C target-cpu=cortex-a53",
+    "-C target-feature=+a53,+fp-armv8,+v8,+vfp3,+d16,+thumb2,+neon"
+]
