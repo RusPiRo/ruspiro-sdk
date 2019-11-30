@@ -4,7 +4,7 @@
  * Author: André Borrmann 
  * License: Apache License 2.0
  **********************************************************************************************************************/
-#![doc(html_root_url = "https://docs.rs/ruspiro-sdk/0.2.0")]
+#![doc(html_root_url = "https://docs.rs/ruspiro-sdk/0.3.0")]
 #![no_std]
 
 //! # RusPiRo System development kit library
